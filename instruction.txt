@@ -1,0 +1,1312 @@
+# MASTER BUILD PROMPT — PROMOFINDER AI
+## Kuku AI Generalist Assignment — Problem 1: Find the Promos (Ads)
+
+You are acting as a senior AI engineer, product manager, full-stack developer, software architect, QA engineer and technical writer.
+
+Your task is to independently design, implement, test, document and deliver a complete working application for the Kuku AI Generalist Assignment.
+
+I have limited time because of examinations. I do NOT want a tutorial, a plan, pseudocode, partial implementation or a list of suggestions.
+
+I want you to BUILD THE ENTIRE PROJECT, execute all safe and affordable checks, fix implementation errors, and leave me with a working, runnable, Dockerised application.
+
+Do not stop after creating the architecture or initial files. Continue until the complete application is implemented.
+
+Do not ask me unnecessary questions. Make sensible assumptions, document them, and proceed.
+
+If something is unavailable, implement a sensible fallback rather than abandoning the project.
+
+---
+
+# PART 1 — UNDERSTAND THE ASSIGNMENT
+
+The project is based on the following exact problem statement:
+
+"Build a tool that reads a microdrama screenplay and finds the best promos in it.
+
+Today an editor watches every episode and picks promo moments by hand, one show at a time, and new shows are released every week.
+
+A promo is a 20 to 60-second clip taken from the show itself and posted on Instagram, TikTok or YouTube to pull new viewers in.
+
+A good promo:
+1. Opens on a hook: something in the first 3 seconds that makes a scrolling viewer stop, such as a slap, a reveal or a shocking line.
+2. Ends on a cliffhanger: it cuts at an unresolved moment, so the viewer wants to know what happens next.
+3. Makes sense independently to someone who has never seen the show.
+
+A promo is usually one continuous stretch but can combine multiple moments, from one episode or across several episodes.
+
+The required tool must:
+- Find promos across all episodes.
+- Give the episode and start/end timestamps of every segment, in order.
+- Explain the hook.
+- Explain the cliffhanger.
+- Provide one line explaining why each promo works.
+- Rank the promos and explain which should be posted first.
+- Check quality and identify where the tool picks badly.
+
+The tool only identifies promotional moments and timestamps. It does not edit videos, add music or add text overlays."
+
+Treat these requirements as non-negotiable.
+
+Do not turn this project into a generic screenplay summariser or a script-generation tool.
+
+The central deliverable is a reliable PROMO DISCOVERY AND RANKING SYSTEM.
+
+---
+
+# PART 2 — PRODUCT VISION
+
+Build a professional application called:
+
+PromoFinder AI
+
+Tagline:
+"Discover the moments that make viewers stop, watch and come back for more."
+
+The application should allow an editor to upload a screenplay containing multiple episodes, run AI-assisted analysis and receive a ranked list of promotional opportunities.
+
+The user should be able to:
+- Upload screenplay files.
+- Analyse all episodes together.
+- Inspect individual promo candidates.
+- Understand exactly where each promo starts and ends.
+- See why each moment was selected.
+- Compare candidates.
+- Review confidence and potential problems.
+- Export the results.
+- Re-run the analysis on a completely different screenplay.
+
+The system must be reusable on unseen inputs. Do not hardcode the provided screenplay, episode names, characters, timestamps or results.
+
+---
+
+# PART 3 — INPUT HANDLING
+
+Implement robust screenplay ingestion.
+
+Support:
+- PDF
+- DOCX
+- TXT
+- Markdown
+- JSON
+- Multiple files uploaded together
+- ZIP containing supported screenplay files
+
+The application must also support a screenplay containing all episodes in a single document.
+
+## Input processing
+
+1. Extract text from uploaded documents.
+2. Identify episode boundaries.
+3. Identify scene boundaries.
+4. Extract timestamps.
+5. Extract dialogue.
+6. Extract action descriptions.
+7. Identify characters where possible.
+8. Preserve the original screenplay text and references to its source.
+9. Build structured episode and scene representations.
+
+Support timestamps in common formats:
+- HH:MM:SS
+- MM:SS
+- HH:MM:SS.mmm
+- Timestamp ranges
+- Timestamps associated with dialogue and action descriptions.
+
+Do not invent timestamps.
+
+If a timestamp is missing:
+- Mark it as unavailable.
+- Never pretend that an inferred timestamp is an exact screenplay timestamp.
+- Explain the limitation.
+- Keep the candidate separate or mark it as requiring human review.
+
+Preserve the original timestamp format in the final results, while also normalising it internally to seconds for duration calculations.
+
+## Episode identification
+
+Support:
+- Episode 1
+- Ep 01
+- EPISODE 01
+- Episode titles
+- Other reasonable naming conventions.
+
+If an episode cannot be identified confidently, flag it for review.
+
+## Input validation
+
+Handle:
+- Empty files.
+- Corrupted files.
+- Duplicate episodes.
+- Missing timestamps.
+- Very large files.
+- Unrecognised file formats.
+- Duplicate content.
+
+Display meaningful errors rather than crashing.
+
+For large input packs, implement chunking and batching so that the entire screenplay does not have to fit into one model request.
+
+---
+
+# PART 4 — PROMO DISCOVERY ENGINE
+
+This is the most important component.
+
+Build a multi-stage analysis pipeline instead of sending the entire screenplay to one LLM and asking it to find promos.
+
+The system should use AI for semantic understanding and ordinary Python code for deterministic validation, calculations and ranking.
+
+## Stage 1: Episode understanding
+
+For every episode, extract:
+
+- Episode number and title.
+- Characters.
+- Character relationships.
+- Locations.
+- Important events.
+- Conflicts.
+- Secrets and revelations.
+- Emotional confrontations.
+- Betrayals.
+- Threats.
+- Unexpected appearances.
+- Major decisions.
+- Unresolved questions.
+- Important story transitions.
+
+Create a structured episode summary and character/story context.
+
+The summary must be used for contextual analysis, not as a replacement for the original screenplay.
+
+## Stage 2: Candidate moment detection
+
+Scan every episode for potential promotional moments.
+
+Look for:
+- Physical confrontations.
+- Slaps and fights.
+- Unexpected entrances.
+- Shocking revelations.
+- Confessions.
+- Betrayals.
+- Accusations.
+- Emotional breakdowns.
+- Threats.
+- Unexpected romantic developments.
+- Secrets being exposed.
+- Dramatic decisions.
+- Suspenseful dialogue.
+- Unexpected twists.
+- Moments where the viewer learns something important.
+- Moments where a character discovers something significant.
+
+Do not select every dramatic moment automatically.
+
+A good promotional candidate must be understandable and interesting to a person who has never seen the series.
+
+Identify candidate start and end points using the original scene and dialogue timestamps.
+
+## Stage 3: Hook detection
+
+For every candidate, evaluate the first three seconds of the promo.
+
+A hook should create an immediate reason to stop scrolling.
+
+Examples:
+- A shocking statement.
+- A slap or confrontation.
+- An unexpected revelation.
+- A surprising visual action described in the screenplay.
+- A threatening statement.
+- An emotional reaction.
+- An unexpected discovery.
+
+Evaluate:
+- Is something interesting happening immediately?
+- Does the opening create curiosity?
+- Is the opening emotionally compelling?
+- Does it need too much previous context?
+- Does the viewer understand what is happening?
+
+A promo that only becomes interesting after 10 seconds should not receive a strong hook score.
+
+The opening three seconds must be evaluated against the actual beginning of the selected promo, not against a later scene in it.
+
+## Stage 4: Cliffhanger detection
+
+Evaluate the ending of each candidate.
+
+Look for:
+- An unanswered question.
+- An unresolved confrontation.
+- A sudden revelation.
+- An interrupted action.
+- An unexpected discovery.
+- A character about to make a major decision.
+- An impending consequence.
+- An unresolved threat.
+- A dramatic twist that raises another question.
+
+A promo should end at the moment of maximum unresolved tension.
+
+Do not select an ending that already explains everything or resolves the conflict completely.
+
+Explain exactly what remains unresolved.
+
+## Stage 5: Standalone comprehensibility
+
+A promotional clip must make sense to a viewer who has never watched the show.
+
+Evaluate:
+- Can the viewer understand who is involved?
+- Is the central conflict understandable?
+- Is enough context provided?
+- Are unexplained names or relationships confusing?
+- Does the clip depend heavily on previous episodes?
+- Does the sequence communicate its own mini-story?
+
+If a candidate needs additional context, identify exactly what is missing.
+
+Do not automatically reject all context-dependent scenes. A small amount of understandable contextual information is acceptable.
+
+## Stage 6: Duration validation
+
+The total duration of every promo must be between 20 and 60 seconds inclusive.
+
+For a continuous promo:
+
+Total duration = End timestamp - Start timestamp.
+
+For a multi-segment promo:
+
+Total duration = Sum of all individual segment durations.
+
+Validate this using Python, never by trusting an LLM's duration estimate.
+
+Reject or flag candidates outside the permitted duration.
+
+Also validate that:
+- Start timestamps precede end timestamps.
+- Timestamps belong to the correct episode.
+- Segment ordering is clear.
+- Segments do not overlap incorrectly.
+- No segment has an impossible timestamp.
+- The final duration is calculated correctly.
+
+## Stage 7: Multi-segment promo discovery
+
+Support both:
+
+A. Continuous promo:
+One uninterrupted section of an episode.
+
+B. Multi-segment promo:
+Two or more screenplay moments combined into one promotional sequence.
+
+Multi-segment promos can use:
+- Multiple scenes from one episode.
+- Multiple episodes.
+- Different episodes where the combined sequence creates a coherent promotional story.
+
+However, do not combine scenes just to reach the duration requirement.
+
+A multi-segment promo must have a logical progression:
+Hook → Context / Conflict → Escalation → Cliffhanger.
+
+Every segment must contribute meaningfully.
+
+Preserve the correct chronological order within each episode. If segments span episodes, explain their order and any editorial sequencing assumption.
+
+Never claim the clip is continuous when it is not.
+
+For multi-segment promos, show each segment's episode, start time, end time and duration separately.
+
+---
+
+# PART 5 — PROMO SCORING AND RANKING
+
+Create a transparent, configurable ranking system.
+
+Do not simply ask the LLM to rank candidates without explaining its criteria.
+
+Implement a deterministic weighted scoring framework.
+
+Use the following initial weights:
+
+| Criterion | Weight |
+|---|---:|
+| Opening hook strength | 25 |
+| Cliffhanger strength | 25 |
+| Standalone comprehensibility | 20 |
+| Emotional intensity / dramatic impact | 15 |
+| Narrative curiosity / desire to know what happens next | 10 |
+| Segment coherence and pacing | 5 |
+| Total | 100 |
+
+Each dimension should receive a score from 0 to 10.
+
+Calculate the weighted score in Python.
+
+Formula:
+
+Final Score =
+(Hook × 2.5) +
+(Cliffhanger × 2.5) +
+(Standalone × 2.0) +
+(Emotional Impact × 1.5) +
+(Curiosity × 1.0) +
+(Coherence × 0.5)
+
+The resulting score must be out of 100.
+
+These are initial product assumptions. Document that they are heuristic weights, not scientifically validated measures of audience conversion.
+
+## Hard eligibility checks
+
+A candidate must not rank as a fully eligible promo if:
+- Its duration is below 20 seconds or above 60 seconds.
+- Its timestamps are invalid.
+- It has no identifiable opening hook.
+- It has no meaningful unresolved ending.
+- It cannot be understood independently.
+
+Keep rejected or uncertain candidates in a separate review section when useful.
+
+Do not inflate a candidate's score to compensate for a failed hard requirement.
+
+## Ranking output
+
+Show:
+- Rank.
+- Promo ID.
+- Episode or episodes.
+- Total duration.
+- Final score.
+- Hook score.
+- Cliffhanger score.
+- Standalone score.
+- Confidence.
+- Why it works.
+- Reason it should be posted early or later.
+
+Explain the top three recommendations.
+
+Also provide:
+- Best overall promo.
+- Strongest hook.
+- Strongest cliffhanger.
+- Best standalone promo.
+- Best multi-segment promo.
+- Candidates requiring human review.
+
+Avoid duplicate or nearly identical promos dominating the top results.
+
+Implement overlap and similarity checks to detect candidates that reuse almost the same screenplay moments.
+
+---
+
+# PART 6 — REQUIRED OUTPUT FORMAT
+
+Every recommended promo must have the following information.
+
+Promo ID: PROMO-001
+
+Rank: 1
+
+Title: A descriptive, short title.
+
+Episodes involved: Episode 3.
+
+Type: Continuous / Multi-segment.
+
+Total duration: 38 seconds.
+
+Final score: 91/100.
+
+Confidence: High / Medium / Low.
+
+Segments:
+
+Segment 1:
+- Episode: 3
+- Start timestamp: 00:02:14
+- End timestamp: 00:02:52
+- Duration: 38 seconds
+
+Hook:
+Describe what happens within the first three seconds and why it catches attention.
+
+Cliffhanger:
+Explain the exact unresolved moment where the promo ends.
+
+Standalone context:
+Explain why a new viewer can understand the sequence.
+
+Why it works:
+One concise, persuasive sentence.
+
+Scoring breakdown:
+Show all six criteria and their scores.
+
+Potential weakness:
+Explain anything that could make the promo less effective.
+
+Posting recommendation:
+Explain why this promo should be posted at its particular ranking.
+
+Source references:
+Show the relevant scene, dialogue or screenplay lines for traceability.
+
+Use actual screenplay data in the real run. The values above are illustrative only.
+
+For multi-segment promos, repeat the segment details for every segment.
+
+---
+
+# PART 7 — QUALITY CONTROL AND FAILURE ANALYSIS
+
+This is a mandatory part of the assignment.
+
+Do not simply claim that the AI is accurate.
+
+Build a quality-checking system.
+
+## Candidate validation
+
+Automatically identify:
+- Missing timestamps.
+- Incorrect duration.
+- Weak openings.
+- Resolved rather than unresolved endings.
+- Missing context.
+- Contradictory segment sequences.
+- Repeated candidate moments.
+- Candidates that depend on unexplained character relationships.
+- Unsupported or invented events.
+- Unclear cross-episode combinations.
+
+## Human review
+
+Include a way for an editor to:
+- Approve a promo.
+- Reject a promo.
+- Edit its timestamps.
+- Mark a hook as weak.
+- Mark a cliffhanger as weak.
+- Mark missing context.
+- Provide a correction or note.
+
+Preserve the original AI output separately from human corrections.
+
+## Failure report
+
+Generate a section called:
+
+"Where PromoFinder AI Picks Badly"
+
+Show real examples of:
+- False positives.
+- Missed opportunities, where discoverable through manual review.
+- Weak hook selections.
+- Incorrect cliffhanger selections.
+- Context-dependent promos.
+- Incorrect timestamp extraction.
+- Duplicate selections.
+
+For every failure:
+1. Show the candidate or missed moment.
+2. Explain what the system got wrong.
+3. Explain the likely reason.
+4. Suggest an improvement.
+5. State whether a human should intervene.
+
+Never fabricate failed runs or claim that an evaluation was performed if it was not.
+
+Distinguish between:
+- Observed failures from actual runs.
+- Simulated edge cases.
+- Known limitations.
+
+---
+
+# PART 8 — APPLICATION INTERFACE
+
+Use Streamlit to build a clean, modern, professional dashboard.
+
+The interface should look like a lightweight internal tool used by a content production company.
+
+Avoid an unnecessarily complicated design.
+
+## Page 1: Dashboard
+
+Show:
+- Application name and description.
+- Number of uploaded episodes.
+- Number of scenes processed.
+- Number of candidate promos discovered.
+- Number of eligible promos.
+- Number requiring review.
+- Current AI model.
+- Last analysis status.
+
+Include a clear upload and analyse workflow.
+
+## Page 2: Upload and Analyse
+
+Allow users to:
+- Upload multiple screenplay files.
+- Upload a ZIP file.
+- See detected episodes.
+- Review parsing warnings.
+- Select a model.
+- Select analysis mode.
+- Start the analysis.
+
+Analysis modes:
+1. Quick scan: fewer candidates and lower token usage.
+2. Standard scan: balanced discovery and quality.
+3. Deep scan: more thorough candidate exploration.
+
+The actual implementation must define how these modes change chunk sizes, candidate limits or analysis passes.
+
+Do not make modes decorative controls.
+
+## Page 3: Ranked Promos
+
+Display the eligible candidates in ranked order.
+
+Each candidate should be displayed as a clean card.
+
+Show:
+- Rank.
+- Title.
+- Score.
+- Duration.
+- Episode references.
+- Hook.
+- Cliffhanger.
+- Why it works.
+- Confidence.
+
+Allow the user to expand a candidate to inspect every segment and its source references.
+
+Provide filtering by:
+- Episode.
+- Score.
+- Duration.
+- Continuous versus multi-segment.
+- Confidence.
+- Review status.
+
+## Page 4: Promo Details
+
+Show:
+- Full segment breakdown.
+- Start and end timestamps.
+- Duration calculation.
+- Hook explanation.
+- Cliffhanger explanation.
+- Standalone-context explanation.
+- Scoring breakdown.
+- Potential weaknesses.
+- Original screenplay excerpts.
+
+## Page 5: Quality Review
+
+Show:
+- Eligible candidates.
+- Rejected candidates.
+- Candidates needing human review.
+- Timestamp warnings.
+- Duplicate warnings.
+- Observed failures.
+- Human approval and rejection controls.
+
+## Page 6: Export
+
+Support:
+- JSON export.
+- CSV export.
+- Markdown report.
+- PDF report.
+
+Include a complete ranked promo list and a separate quality report.
+
+## Page 7: Settings
+
+Allow:
+- AI provider selection.
+- Model selection.
+- API configuration status.
+- Analysis parameters.
+- Scoring weight configuration.
+- Token and usage information when provided by the API.
+- Resetting the current analysis.
+
+Never expose API keys in the interface.
+
+---
+
+# PART 9 — AI MODEL PROVIDER ARCHITECTURE
+
+This requirement is especially important.
+
+I want to be able to change the AI model by changing a value in one place.
+
+Use an adapter pattern.
+
+Create a central provider interface with methods such as:
+
+- generate_structured_output()
+- generate_text()
+- check_connection()
+- get_model_name()
+
+Implement adapters where feasible for:
+- Google Gemini.
+- OpenAI.
+- Anthropic.
+- OpenAI-compatible API endpoints.
+- Ollama/local models if practical.
+
+Do not force every provider to be implemented if it compromises reliability. The minimum requirement is one fully working provider and a clean architecture that makes additional providers easy to add.
+
+Use Pydantic schemas to validate structured AI responses.
+
+The analysis engine must not contain provider-specific code.
+
+Keep the provider selection and model configuration centralised.
+
+## Environment variables
+
+Create a comprehensive .env.example containing:
+
+AI_PROVIDER=gemini
+AI_MODEL=your-model-name
+
+GEMINI_API_KEY=
+OPENAI_API_KEY=
+ANTHROPIC_API_KEY=
+
+OPENAI_BASE_URL=
+OLLAMA_BASE_URL=
+
+AI_TEMPERATURE=0.2
+AI_MAX_RETRIES=2
+AI_TIMEOUT=120
+
+MAX_CHUNK_SIZE=12000
+CHUNK_OVERLAP=500
+
+LOG_LEVEL=INFO
+
+APP_ENV=development
+
+Do not hardcode real credentials.
+
+The user should be able to switch providers and models by modifying .env and restarting the application.
+
+Do not scatter model names throughout the codebase.
+
+Document the exact process of adding another provider.
+
+## Cost awareness
+
+Implement:
+- Request retries with limits.
+- Exponential backoff.
+- Chunking.
+- Structured responses.
+- Caching where appropriate.
+- Avoiding repeated analysis of unchanged content.
+- Clear usage estimates where possible.
+
+Do not claim precise token costs when the provider does not expose the necessary usage data.
+
+---
+
+# PART 10 — TESTING REQUIREMENTS AND CREDIT PROTECTION
+
+I want you to build a proper test suite but avoid consuming paid API credits.
+
+This instruction is critical.
+
+## Default testing behaviour
+
+All normal tests must run without external AI API calls.
+
+Use:
+- Mock providers.
+- Deterministic fake AI responses.
+- Sample screenplay fixtures.
+- Unit tests.
+- Integration tests with mocked AI.
+- Schema validation tests.
+- Timestamp calculation tests.
+- Duration validation tests.
+- Ranking calculation tests.
+- Multi-segment validation tests.
+- File parsing tests.
+- Error handling tests.
+
+## Live API tests
+
+Do NOT automatically run live AI tests.
+
+Do NOT make paid requests merely to see whether the API works.
+
+Live tests must require an explicit command, for example:
+
+python scripts/run_live_tests.py
+
+Also require:
+RUN_LIVE_AI_TESTS=true
+
+Before making live requests:
+1. Check whether the configured provider has a usable API key or local endpoint.
+2. If no key is available, skip live tests.
+3. If credentials exist but are invalid, report the connection error.
+4. Do not repeatedly retry expensive calls.
+5. Use the smallest possible test input.
+6. Never trigger full 50-episode analysis during ordinary tests.
+
+If credits or account balance cannot be verified from the provider, do not claim that credits are available. Explain that credential presence does not guarantee remaining credits.
+
+Default test command:
+
+pytest -q
+
+It must work without API keys and without paid requests.
+
+Clearly report:
+- Passed tests.
+- Failed tests.
+- Skipped tests.
+- Whether live AI tests were executed.
+
+Do not silently mark skipped tests as passed.
+
+---
+
+# PART 11 — DEMO DATA AND EVALUATION
+
+Create a small, fictional screenplay dataset for testing and demonstration.
+
+It should contain:
+- At least 3 episodes.
+- Multiple scenes per episode.
+- Character names.
+- Dialogue.
+- Action descriptions.
+- Explicit timestamps.
+- Strong hooks.
+- Weak hooks.
+- Unresolved cliffhangers.
+- Resolved endings.
+- Potential standalone moments.
+- Context-dependent moments.
+- At least one multi-segment promotional opportunity.
+
+Also include deliberately challenging examples:
+- An attractive scene that is too short.
+- A scene that exceeds 60 seconds.
+- A strong opening with a weak ending.
+- A strong ending with a weak opening.
+- A scene that requires previous episode context.
+- A repeated promotional opportunity.
+- Missing timestamps.
+- A possible cross-episode combination.
+
+Use fictional content only.
+
+Clearly label demo data as synthetic. Never present it as actual Kuku content.
+
+## Evaluation framework
+
+Create a reproducible evaluation dataset.
+
+For every test case, define expected properties.
+
+Measure:
+- Candidate detection precision.
+- Candidate detection recall, when a ground-truth set is available.
+- Hook classification agreement.
+- Cliffhanger classification agreement.
+- Standalone comprehensibility agreement.
+- Timestamp validity.
+- Duration compliance.
+- Duplicate detection.
+- Ranking quality.
+
+Where possible, calculate:
+
+Precision = True Positives / (True Positives + False Positives)
+
+Recall = True Positives / (True Positives + False Negatives)
+
+F1 = 2 × Precision × Recall / (Precision + Recall)
+
+Do not invent ground-truth labels.
+
+For synthetic tests, manually define the expected outcomes and explain that they are controlled test cases, not real-world performance evidence.
+
+Include a clear report explaining what these metrics can and cannot prove.
+
+---
+
+# PART 12 — DOCKERISATION
+
+The complete application must run in Docker.
+
+Create:
+
+- Dockerfile
+- docker-compose.yml
+- .dockerignore
+- .env.example
+- requirements.txt or pyproject.toml
+
+Requirements:
+1. A single command should start the application.
+2. The application should be accessible through a documented localhost port.
+3. Environment variables must be loaded correctly.
+4. Uploaded files and generated results should persist using Docker volumes.
+5. The container should not contain API keys.
+6. The application should not require a local Python installation when run through Docker.
+7. Include a health check if practical.
+8. Include sensible restart behaviour.
+9. Document how to stop and restart the application.
+
+Expected command:
+
+docker compose up --build
+
+Expected browser URL:
+
+http://localhost:8501
+
+Also provide a non-Docker method for running the application locally.
+
+---
+
+# PART 13 — OUTPUT STORAGE
+
+Create an organised output structure.
+
+Every completed analysis should be saved with a unique analysis ID.
+
+Store:
+- Original input metadata.
+- Parsed screenplay data.
+- Candidate promos.
+- Ranked promos.
+- AI raw responses.
+- Validation results.
+- Rejected candidates.
+- Human corrections.
+- Quality report.
+- Exported reports.
+
+Preserve raw AI outputs separately from processed and validated outputs.
+
+Do not overwrite previous analyses accidentally.
+
+Provide an option to download the complete analysis output.
+
+Avoid publicly exposing confidential screenplay content.
+
+---
+
+# PART 14 — REPRODUCIBILITY AND SCALABILITY
+
+The application must work on a completely new screenplay.
+
+Avoid:
+- Hardcoded episode numbers.
+- Hardcoded characters.
+- Hardcoded timestamps.
+- Hardcoded promotional moments.
+- Hardcoded sample results.
+- Fixed assumptions about the number of episodes.
+
+The application should be designed to scale to:
+- 1 episode.
+- 10 episodes.
+- 50 episodes.
+- 100+ episodes.
+
+Implement sensible batching and chunking.
+
+Explain:
+- How the system handles more episodes.
+- How API calls grow with screenplay size.
+- Which stages can be parallelised.
+- How caching reduces repeated work.
+- Where processing costs may become significant.
+- Where a human reviewer remains important.
+
+Do not claim that the current prototype has been benchmarked at 100 episodes unless it has actually been tested at that scale.
+
+---
+
+# PART 15 — SOLUTION DOCUMENT FOR KUKU
+
+Generate a professional PDF solution document with a maximum of TWO PAGES.
+
+It must follow the Kuku assignment requirements.
+
+Include:
+
+1. Problem chosen and why.
+2. Problem framing.
+3. Assumptions.
+4. How PromoFinder AI works.
+5. Architecture.
+6. AI versus code responsibilities.
+7. Model and technology choices.
+8. How it scales to every show Kuku makes.
+9. Quality evaluation and test results.
+10. Where it fails.
+11. Human-in-the-loop process.
+12. One example where an AI tool got something wrong during development or testing.
+
+IMPORTANT:
+Do not fabricate development mistakes or test results. Use actual observations from your work. If no meaningful mistake has been observed, describe a genuine model limitation discovered through testing or clearly label a simulated failure.
+
+Keep the document concise, professional and specific.
+
+The document should not exceed two pages.
+
+---
+
+# PART 16 — README
+
+Create an exceptionally clear README.md.
+
+It must include:
+
+1. Project overview.
+2. Problem statement.
+3. Features.
+4. Architecture diagram using Mermaid.
+5. Folder structure.
+6. Prerequisites.
+7. Docker setup.
+8. Local Python setup.
+9. Environment configuration.
+10. How to obtain and configure an AI API key.
+11. How to switch between AI providers.
+12. How to switch model names.
+13. How to add another model provider.
+14. How to upload screenplay files.
+15. How to run analysis.
+16. How scoring works.
+17. How timestamps and durations are validated.
+18. How multi-segment promos work.
+19. How to export results.
+20. How to run automated tests.
+21. How to run optional live AI tests.
+22. How to interpret skipped tests.
+23. Troubleshooting.
+24. Known limitations.
+25. Cost considerations.
+26. Security and privacy considerations.
+
+Include exact copy-paste commands.
+
+A person with no knowledge of the codebase should be able to follow the README and run the application.
+
+---
+
+# PART 17 — REQUIRED PROJECT STRUCTURE
+
+Use a clean, maintainable architecture similar to:
+
+promofinder-ai/
+│
+├── app/
+│   ├── main.py
+│   ├── config.py
+│   ├── ui/
+│   │   ├── dashboard.py
+│   │   ├── upload.py
+│   │   ├── ranked_promos.py
+│   │   ├── promo_details.py
+│   │   ├── quality_review.py
+│   │   ├── exports.py
+│   │   └── settings.py
+│   │
+│   ├── ingestion/
+│   │   ├── file_loader.py
+│   │   ├── pdf_parser.py
+│   │   ├── docx_parser.py
+│   │   ├── screenplay_parser.py
+│   │   └── episode_detector.py
+│   │
+│   ├── ai/
+│   │   ├── base_provider.py
+│   │   ├── provider_factory.py
+│   │   ├── gemini_provider.py
+│   │   ├── openai_provider.py
+│   │   ├── anthropic_provider.py
+│   │   ├── prompts.py
+│   │   └── schemas.py
+│   │
+│   ├── analysis/
+│   │   ├── episode_analyzer.py
+│   │   ├── candidate_detector.py
+│   │   ├── hook_analyzer.py
+│   │   ├── cliffhanger_analyzer.py
+│   │   ├── context_analyzer.py
+│   │   ├── segment_builder.py
+│   │   ├── validator.py
+│   │   ├── ranker.py
+│   │   └── quality_checker.py
+│   │
+│   ├── storage/
+│   │   ├── repository.py
+│   │   └── models.py
+│   │
+│   └── utils/
+│       ├── timestamps.py
+│       ├── logging.py
+│       └── helpers.py
+│
+├── tests/
+│   ├── unit/
+│   ├── integration/
+│   ├── fixtures/
+│   └── test_ranking.py
+│
+├── scripts/
+│   └── run_live_tests.py
+│
+├── data/
+│   ├── demo/
+│   ├── uploads/
+│   ├── outputs/
+│   └── raw_ai_responses/
+│
+├── reports/
+│   ├── solution_document.pdf
+│   └── evaluation_report.md
+│
+├── .env.example
+├── .gitignore
+├── .dockerignore
+├── Dockerfile
+├── docker-compose.yml
+├── requirements.txt
+└── README.md
+
+You may adjust this structure if a simpler structure is more maintainable. Do not create empty files or unnecessary abstraction layers just to match this tree.
+
+---
+
+# PART 18 — IMPLEMENTATION WORKFLOW
+
+Follow these steps in order.
+
+STEP 1:
+Inspect the existing workspace and identify all available screenplay files and input packs.
+
+If the actual Kuku screenplay input pack is present, use it for the real analysis.
+
+If it is absent:
+- Do not invent or pretend to possess it.
+- Build the complete application using synthetic demonstration data.
+- Ensure the upload functionality supports the actual input pack when I provide it later.
+- Explain exactly where to place the input pack.
+
+STEP 2:
+Write the architecture and establish the core data schemas.
+
+STEP 3:
+Implement screenplay ingestion and timestamp extraction.
+
+STEP 4:
+Implement the AI provider abstraction.
+
+STEP 5:
+Implement the promo discovery pipeline.
+
+STEP 6:
+Implement validation, scoring, ranking and duplicate detection.
+
+STEP 7:
+Implement the Streamlit dashboard.
+
+STEP 8:
+Implement exports and persistent storage.
+
+STEP 9:
+Implement Docker.
+
+STEP 10:
+Implement synthetic fixtures and automated tests.
+
+STEP 11:
+Run the affordable, offline test suite.
+
+STEP 12:
+Fix all discovered implementation errors and rerun relevant tests.
+
+STEP 13:
+If a configured live AI provider is available, do not automatically consume credits. Leave live testing optional and explain the exact command for me to run.
+
+STEP 14:
+Generate the two-page solution PDF and all documentation.
+
+STEP 15:
+Verify that the application starts successfully.
+
+STEP 16:
+Inspect the final project for:
+- Missing imports.
+- Incorrect file paths.
+- Broken environment loading.
+- Unhandled exceptions.
+- Invalid schemas.
+- Timestamp errors.
+- Duration errors.
+- API key exposure.
+- Docker issues.
+- Incorrect README commands.
+
+STEP 17:
+Present a concise final completion report.
+
+---
+
+# PART 19 — IMPORTANT ENGINEERING RULES
+
+1. Do not ask me to approve every implementation decision.
+2. Do not stop after making a plan.
+3. Do not produce pseudocode instead of working code.
+4. Do not leave TODO placeholders for core functionality.
+5. Do not hardcode demo results into the real analysis pipeline.
+6. Do not fake AI analysis when no model is configured.
+7. Do not invent timestamps.
+8. Do not invent screenplay content.
+9. Do not make unnecessary paid API requests.
+10. Do not run live tests automatically.
+11. Do not commit secrets or API keys.
+12. Do not claim a test passed unless it was executed.
+13. Do not claim scalability benchmarks without running them.
+14. Use clear typing, modular functions and meaningful error messages.
+15. Make reasonable assumptions and document them.
+16. Prefer a reliable working implementation over excessive complexity.
+17. Preserve the exact assignment scope: identify promotional moments and their timestamps, not edit or generate video clips.
+
+If an external dependency or model is unavailable, implement the rest of the project and document the limitation.
+
+---
+
+# PART 20 — FINAL ACCEPTANCE CRITERIA
+
+Do not consider the assignment complete until the following are satisfied.
+
+[ ] A working Streamlit application exists.
+
+[ ] The application starts locally.
+
+[ ] Docker configuration exists.
+
+[ ] Docker startup instructions are verified as far as the environment permits.
+
+[ ] Multiple screenplay files can be uploaded.
+
+[ ] A single document containing multiple episodes can be processed.
+
+[ ] Episode boundaries can be detected.
+
+[ ] Screenplay timestamps can be extracted and validated.
+
+[ ] AI-assisted candidate promo discovery is implemented.
+
+[ ] Hooks are evaluated using the first three seconds.
+
+[ ] Cliffhangers are evaluated.
+
+[ ] Standalone comprehensibility is evaluated.
+
+[ ] Continuous promos are supported.
+
+[ ] Multi-segment promos are supported.
+
+[ ] Every eligible promo meets the 20–60-second duration constraint.
+
+[ ] Weighted scoring is calculated in code.
+
+[ ] Candidates are ranked.
+
+[ ] Reasons for ranking are provided.
+
+[ ] Weak and rejected candidates can be inspected.
+
+[ ] Quality checks are implemented.
+
+[ ] Raw AI responses are preserved.
+
+[ ] JSON and CSV exports work.
+
+[ ] PDF or Markdown report export works.
+
+[ ] AI provider configuration is centralised.
+
+[ ] Model switching is documented.
+
+[ ] .env.example exists.
+
+[ ] Automated tests work without API credits.
+
+[ ] Live tests are optional and protected.
+
+[ ] Synthetic demo data exists.
+
+[ ] An evaluation report exists.
+
+[ ] The Kuku solution document is no longer than two pages.
+
+[ ] README contains complete running instructions.
+
+[ ] No fabricated real-world test results are included.
+
+[ ] The application can accept a new screenplay without code modifications.
+
+---
+
+# PART 21 — FINAL RESPONSE REQUIRED FROM YOU
+
+When you have finished implementation, provide me with:
+
+1. A summary of everything built.
+2. The exact project directory.
+3. The exact command to run using Docker.
+4. The exact command to run without Docker.
+5. The browser URL.
+6. How to configure the AI API key.
+7. How to switch models using .env.
+8. Which tests you actually executed.
+9. Which tests were skipped and why.
+10. Whether any live AI credits were consumed.
+11. How to run optional live tests.
+12. Where the synthetic demo data is located.
+13. Where to upload the actual Kuku input pack.
+14. Where raw outputs are stored.
+15. Where the two-page PDF solution document is stored.
+16. Any remaining limitations or issues.
+
+Provide the README and all generated deliverables in the project directory.
+
+If the environment allows you to launch the application, do so and verify it.
+
+Do not finish by merely telling me how I could build the project.
+
+BUILD IT NOW.
+
+Start by inspecting the workspace and proceed through all implementation steps without waiting for further instructions.

@@ -1,0 +1,189 @@
+# SYNTHETIC DEMONSTRATION DATASET: "THE BILLIONAIRE'S SECRET CONTRACT"
+# NOTICE: This is 100% fictional, synthetic test data created specifically for PromoFinder AI validation.
+# Not affiliated with or representative of any production company content.
+
+EPISODE NUMBER: Episode 1 - The Stolen Signature
+EPISODE LOGLINE: Maya discovers her foster mother traded her secret family heirloom company to ruthless tycoon Damon Vance in exchange for debt forgiveness.
+
+SCENE 01
+Scene heading: INT. VANCE TOWER - BOARDROOM - DAY
+Scene start: 00:00.00
+Scene end: 02:30.00
+
+**ACTION:**
+Start: (00:00.00) | End: (00:02.50)
+The frosted glass doors slam open as Maya storms into the high-rise executive suite, holding a charred contract.
+
+**MAYA (Furious, Uncompromising):**
+Start: (00:01.20) | End: (00:04.00)
+"Sign this void agreement right now, Damon, or the entire board hears about your fraud!"
+
+**DAMON (Cold, Calculating):**
+Start: (00:04.50) | End: (00:07.50)
+"Fraud? Check signature line three, little girl. Your mother signed away your rights an hour ago."
+
+**CAMERA:**
+Start: (00:07.50) | End: (00:10.00)
+Snap zoom on Maya's widening pupils as Damon slides the legal deed across the glass table.
+
+**MAYA (Trembling, Shocked):**
+Start: (00:10.50) | End: (00:14.20)
+"She would never... you coerced her!"
+
+**DAMON (Amused, Threatening):**
+Start: (00:14.50) | End: (00:18.00)
+"She took thirty million dollars in cash and boarded a flight to Zurich. You are officially working for me."
+
+**MAYA (Defiant, Raising Hand):**
+Start: (00:18.50) | End: (00:23.00)
+"I will burn this building to ash before I take a single order from you!"
+
+**ACTION:**
+Start: (00:23.00) | End: (00:26.50)
+Maya slaps Damon across the face. The sharp crack echoes across the silent boardroom.
+
+**DAMON (Dangerous, Whispering):**
+Start: (00:27.00) | End: (00:32.00)
+"That slap just doubled the price of your freedom. Security—lock the penthouse elevators."
+
+**CAMERA:**
+Start: (00:32.00) | End: (00:34.50)
+Heavy iron magnetic locks seal shut with a metallic thud as Maya backs against the window.
+
+# --- EDGE CASE 1: SCENE TOO SHORT (12 seconds) ---
+SCENE 02
+Scene heading: INT. ELEVATOR LOBBY - DAY
+Scene start: 02:40.00
+Scene end: 02:52.00
+
+**MAYA (Panicked):**
+Start: (02:40.00) | End: (02:45.00)
+"Let me out of here!"
+
+**SECURITY GUARD (Stoic):**
+Start: (02:45.50) | End: (02:52.00)
+"Mr. Vance ordered all exits quarantined until sunrise."
+
+# --- EDGE CASE 2: RESOLVED ENDING (NO CLIFFHANGER) ---
+SCENE 03
+Scene heading: INT. BREAK ROOM - DAY
+Scene start: 03:00.00
+Scene end: 03:45.00
+
+**MAYA (Calm, Resigned):**
+Start: (03:00.00) | End: (03:15.00)
+"I suppose I'll just sit here and drink this tea until morning."
+
+**SECRETARY (Friendly):**
+Start: (03:16.00) | End: (03:30.00)
+"That sounds like a sensible idea. Have a lemon cookie."
+
+**MAYA (Smiling):**
+Start: (03:31.00) | End: (03:45.00)
+"Thank you. Everything will be fine once the police arrive tomorrow."
+
+---
+
+EPISODE NUMBER: Episode 2 - The Midnight Ultimatum
+EPISODE LOGLINE: Trapped in the tower, Maya uncovers an encrypted safe containing evidence that Damon didn't buy the company—he is hunting the man who murdered her biological father.
+
+SCENE 01
+Scene heading: INT. ARCHIVE VAULT - NIGHT
+Scene start: 00:00.00
+Scene end: 01:50.00
+
+# --- EDGE CASE 3: MISSING TIMESTAMPS ---
+**MAYA (Whispering):**
+Start: None | End: None
+"The code... it's my birthdate."
+
+**ACTION:**
+Start: None | End: None
+The titanium safe swings open, revealing a police dossier with Maya's infant photograph.
+
+# --- STRONG HOOK + STRONG CLIFFHANGER (42 seconds) ---
+SCENE 02
+Scene heading: INT. PENTHOUSE OFFICE - NIGHT
+Scene start: 00:40.00
+Scene end: 01:45.00
+
+**DAMON (Cold, Gun in Hand):**
+Start: (00:40.00) | End: (00:44.00)
+"Put down the dossier, Maya, or this ends right here."
+
+**MAYA (In Tears, Holding File):**
+Start: (00:44.50) | End: (00:49.00)
+"You didn't steal my inheritance... you were my father's partner!"
+
+**DAMON (Bitter, Stepping Closer):**
+Start: (00:49.50) | End: (00:54.00)
+"And I swore to him on his deathbed that I would protect his bloodline."
+
+**MAYA (Disbelieving, Shocked):**
+Start: (00:54.50) | End: (00:58.00)
+"By locking me in a cage?"
+
+**DAMON (Intense, Unyielding):**
+Start: (00:58.50) | End: (01:04.00)
+"By keeping you off the streets before the syndicate realizes you are the sole heir to the empire."
+
+**ACTION:**
+Start: (01:04.50) | End: (01:08.00)
+Laser sights from an assassin's sniper rifle appear through the window, centering on Damon's chest.
+
+**MAYA (Screaming):**
+Start: (01:08.50) | End: (01:12.00)
+"Damon, get down!"
+
+**CAMERA:**
+Start: (01:12.00) | End: (01:14.50)
+The window shatters into a million pieces as a gunshot rings out. Cut to black.
+
+---
+
+EPISODE NUMBER: Episode 3 - The Syndicate Strikes
+EPISODE LOGLINE: As Damon recovers from the ambush, Maya must choose between fleeing the country or posing as his ruthless fiancée to infiltrate the syndicate's annual gala.
+
+SCENE 01
+Scene heading: INT. SAFE HOUSE - DAY
+Scene start: 00:00.00
+Scene end: 02:10.00
+
+# --- STRONG CANDIDATE (40 seconds) ---
+**DAMON (Wounded, Bandaged):**
+Start: (00:10.00) | End: (00:14.00)
+"If you walk out that door, you die within twenty-four hours."
+
+**MAYA (Furious, Packing Bag):**
+Start: (00:14.50) | End: (00:18.50)
+"And if I stay, I'm a pawn in your war!"
+
+**DAMON (Grasping Her Wrist):**
+Start: (00:19.00) | End: (00:24.00)
+"Not a pawn. My fiancée. Tonight you wear the Romanov emerald to the Syndicate gala."
+
+**MAYA (Gasping, Defiant):**
+Start: (00:24.50) | End: (00:29.00)
+"You expect me to play the loving bride to the man who kidnapped me?"
+
+**DAMON (Whispering in Her Ear):**
+Start: (00:29.50) | End: (00:36.00)
+"I expect you to play the woman who owns half this city. Because the man who killed your father is hosting the banquet."
+
+**CAMERA:**
+Start: (00:36.50) | End: (00:40.00)
+Close-up on Maya's fierce expression as she slowly releases the bag and accepts the blood-red jewel box.
+
+# --- EDGE CASE 4: SCENE EXCEEDING 60 SECONDS (85 seconds) ---
+SCENE 02
+Scene heading: INT. BALLROOM HALLWAY - NIGHT
+Scene start: 01:00.00
+Scene end: 02:25.00
+
+**MAYA:**
+Start: (01:00.00) | End: (01:20.00)
+"This long monologue describes the architecture of the mansion in tedious detail."
+
+**DAMON:**
+Start: (01:21.00) | End: (02:25.00)
+"And here is another sixty-four seconds of walking down corridors without any sudden conflict or cliffhanger."

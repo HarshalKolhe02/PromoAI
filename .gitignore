@@ -1,0 +1,80 @@
+# ==========================================
+# PromoFinder AI — Git Ignore Configuration
+# ==========================================
+
+# Virtual Environments
+venv/
+.venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# Python Bytecode & Runtime Cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Testing & Quality Assurance Artifacts
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+.hypothesis/
+
+# Environment Variables & Secrets
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+!*.example
+
+# Build, Packaging & Distribution Artifacts
+build/
+dist/
+*.egg-info/
+*.egg
+eggs/
+.eggs/
+
+# Internal Generation Scripts & Development Utilities
+reports/generate_solution_pdf.py
+reports/*_generator*.py
+scratch/
+tmp/
+temp/
+*.tmp
+
+# Runtime Output Storage & User Uploads
+data/uploads/*
+!data/uploads/.gitkeep
+data/outputs/*
+!data/outputs/.gitkeep
+data/raw_ai_responses/*
+!data/raw_ai_responses/.gitkeep
+
+# Application & System Logs
+*.log
+logs/
+*.pid
+
+# IDE, Editor & OS Files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.swp
+*.swo
+*~
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
